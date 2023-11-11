@@ -6,6 +6,7 @@ const userService = () => {
     const user = await userRepository.createUser({ name, email, password });
     return user;
   };
+  
   const GetUserByEmailAndPassword = async ({ email, password }: IUser) => {
     const user = await userRepository.getUserByEmailAndPassword({
       email,
@@ -13,6 +14,7 @@ const userService = () => {
     });
     return user;
   };
+  
   return {
     CreateUser,
     GetUserByEmailAndPassword,
