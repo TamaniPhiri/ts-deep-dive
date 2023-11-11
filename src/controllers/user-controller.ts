@@ -5,15 +5,15 @@ import { User } from "../models/User";
 
 const userController = {
   userRegister: async (req: Request, res: Response) => {
-    const { name, email, password } = req.body;
     try {
+      const { name, email, password } = req.body;
       const existingUser = await User.findFirst({
         where: {
           email,
         },
       });
       if (existingUser) {
-        res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
           error: "User already exists",
         });
       }
