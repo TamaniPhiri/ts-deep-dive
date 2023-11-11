@@ -5,8 +5,8 @@ import HttpStatusCode from "http-status-codes";
 import { User } from "../models/User";
 import bcrypt from "bcrypt";
 
-const userController = {
-  userRegister: async (req: Request, res: Response) => {
+const userController = () => {
+  const userRegister = async (req: Request, res: Response) => {
     try {
       const { name, email, password } = req.body;
       const existingUser = await User.findFirst({
@@ -22,10 +22,12 @@ const userController = {
 
       const hashedPassword = await bcrypt.hash(password, 25);
 
-      const user = await userService.CreateUser({
-        name,
-        email,
-        password: hashedPassword,
+      const user = await User.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword,
+        },
       });
       return res.status(HttpStatusCode.OK).json({
         message: "Registration successful",
@@ -33,13 +35,14 @@ const userController = {
         name: user.name,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
-        error: error,
+        error: "Internal Server Error",
       });
     }
-  },
-  userLogin: async (req: Request, res: Response) => {
+  };
+
+  const userLogin = async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
       const user = await userService.GetUserByEmailAndPassword({
@@ -51,10 +54,10 @@ const userController = {
           error: "User doesn't exist",
         });
       }
-      const verifyPassword = await bcrypt.compare(user.password, password);
+      const verifyPassword = await bcrypt.compare(password, user.password);
       if (!verifyPassword) {
         return res.status(HttpStatusCode.UNAUTHORIZED).send({
-          error: "Invalid Password ",
+          error: "Invalid Password",
         });
       }
       const token = jwt.sign(user, process.env.JWT_SECRET as string, {
@@ -69,12 +72,17 @@ const userController = {
         token: token,
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
-        error: error,
+        error: "Internal Server Error",
       });
     }
-  },
+  };
+
+  return {
+    userRegister,
+    userLogin,
+  };
 };
 
-export default userController;
+export default userController();
