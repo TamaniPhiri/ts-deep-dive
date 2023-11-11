@@ -1,5 +1,6 @@
 import userService from "../services/user-service";
 import { Response, Request } from "express";
+import HttpStatusCode from "http-status-codes";
 
 const userController = {
   userRegister: async (req: Request, res: Response) => {
@@ -11,8 +12,7 @@ const userController = {
           password,
         })
         .then(() => {
-          return res.send({
-            status: 500,
+          return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
             error: "User already exists",
           });
         });
@@ -20,8 +20,7 @@ const userController = {
       return res.json(user);
     } catch (error) {
       console.log(error);
-      res.send({
-        status: 500,
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
         error: error,
       });
     }
