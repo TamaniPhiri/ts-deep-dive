@@ -28,6 +28,7 @@ const userController = {
         password: hashedPassword,
       });
       return res.status(HttpStatusCode.OK).json({
+        message: "Registration successful",
         email: user.email,
         name: user.name,
       });
@@ -56,8 +57,8 @@ const userController = {
           error: "Invalid Password ",
         });
       }
-      const token = await jwt.sign(user, process.env.JWT_SECRET as string, {
-        expiresIn: "3s",
+      const token = jwt.sign(user, process.env.JWT_SECRET as string, {
+        expiresIn: "1hr",
       });
       res.cookie("token", token, {
         httpOnly: true,
