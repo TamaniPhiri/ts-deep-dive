@@ -19,13 +19,13 @@ const userRepository = () => {
       },
     });
   };
-  const getUserByEmail = async ({ email, password }: IUser) => {
+  const getUserByEmail=async({email}:IUser)=>{
     await User.findFirst({
-      where: {
-        email,
-      },
-    });
-  };
+      where:{
+        email
+      }
+    })
+  }
   const updateUserById = async ({ id, email, password, name }: IUser) => {
     await User.update({
       where: {
