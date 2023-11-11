@@ -31,10 +31,18 @@ const userRepository = () => {
       },
     });
   };
+  const deleteUserByID = async ({ id }: IUser) => {
+    await User.delete({
+      where: {
+        id,
+      },
+    });
+  };
   return {
     createUser,
     getUserByEmailAndPassword,
-    updateUserById
+    updateUserById,
+    deleteUserByID,
   };
 };
 
