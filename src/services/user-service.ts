@@ -14,7 +14,6 @@ const userService = () => {
     });
     return user;
   };
-  
   return {
     CreateUser,
     GetUserByEmailAndPassword,

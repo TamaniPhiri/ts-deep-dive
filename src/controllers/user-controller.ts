@@ -34,6 +34,25 @@ const userController = {
       });
     }
   },
+  userLogin: async (req: Request, res: Response) => {
+    try {
+      const { email, password } = req.body;
+      const user = await userService.GetUserByEmailAndPassword({
+        email,
+        password,
+      });
+      if (!user) {
+        return res.status(HttpStatusCode.NOT_FOUND).send({
+          error: "User doesn't exist",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+        error: error,
+      });
+    }
+  },
 };
 
 export default userController;
