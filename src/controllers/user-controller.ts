@@ -27,7 +27,10 @@ const userController = {
         email,
         password: hashedPassword,
       });
-      return res.json(user);
+      return res.status(HttpStatusCode.OK).json({
+        email: user.email,
+        name: user.name,
+      });
     } catch (error) {
       console.log(error);
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
@@ -59,7 +62,7 @@ const userController = {
       res.cookie("token", token, {
         httpOnly: true,
       });
-      return res.send({
+      return res.status(HttpStatusCode.OK).send({
         email: user.email,
         name: user.name,
         token: token,
