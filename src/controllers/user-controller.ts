@@ -2,6 +2,7 @@ import userService from "../services/user-service";
 import { Response, Request } from "express";
 import HttpStatusCode from "http-status-codes";
 import { User } from "../models/User";
+import bcrypt from "bcrypt";
 
 const userController = {
   userRegister: async (req: Request, res: Response) => {
@@ -17,7 +18,12 @@ const userController = {
           error: "User already exists",
         });
       }
-      const user = await userService.CreateUser({ name, email, password });
+      const hashedPassword = await bcrypt.hash(password, 20);
+      const user = await userService.CreateUser({
+        name,
+        email,
+        password: hashedPassword,
+      });
       return res.json(user);
     } catch (error) {
       console.log(error);
