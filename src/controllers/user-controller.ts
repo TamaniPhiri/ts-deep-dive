@@ -10,7 +10,6 @@ const userController = {
       const existingUser = await User.findFirst({
         where: {
           email,
-          password,
         },
       });
       if (existingUser) {
