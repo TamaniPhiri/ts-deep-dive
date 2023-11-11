@@ -10,6 +10,7 @@ const userController = () => {
       //     password,
       //   });
       const user = await userService.CreateUser({ name, email, password });
+      res.json(user);
     } catch (error) {
       console.log(error);
       res.send({
