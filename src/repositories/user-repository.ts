@@ -46,4 +46,4 @@ const userRepository = () => {
   };
 };
 
-export default userRepository;
+export default userRepository();
