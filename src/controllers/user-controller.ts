@@ -1,16 +1,23 @@
 import userService from "../services/user-service";
 import { Response, Request } from "express";
 
-const userController = () => {
-  const userRegister = async (req: Request, res: Response) => {
+const userController = {
+  userRegister: async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
     try {
-      //   const existingUser = await userService.GetUserByEmailAndPassword({
-      //     email,
-      //     password,
-      //   });
+      await userService
+        .GetUserByEmailAndPassword({
+          email,
+          password,
+        })
+        .then(() => {
+          return res.send({
+            status: 500,
+            error: "User already exists",
+          });
+        });
       const user = await userService.CreateUser({ name, email, password });
-      res.json(user);
+      return res.json(user);
     } catch (error) {
       console.log(error);
       res.send({
@@ -18,10 +25,7 @@ const userController = () => {
         error: error,
       });
     }
-  };
-  return {
-    userRegister,
-  };
+  },
 };
 
-export default userController();
+export default userController;
