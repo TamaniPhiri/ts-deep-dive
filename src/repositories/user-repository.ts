@@ -11,8 +11,17 @@ const userRepository = () => {
       },
     });
   };
+  const getUserByEmailAndPassword = async ({ email, password }: IUser) => {
+    await User.findFirst({
+      where: {
+        email,
+        password,
+      },
+    });
+  };
   return {
     createUser,
+    getUserByEmailAndPassword,
   };
 };
 
