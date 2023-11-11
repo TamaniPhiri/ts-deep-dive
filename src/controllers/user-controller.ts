@@ -18,14 +18,13 @@ const userController = {
           error: "User already exists",
         });
       }
-      
-      // Await the result of bcrypt.hash to get the actual hashed password
+
       const hashedPassword = await bcrypt.hash(password, 20);
-      
+
       const user = await userService.CreateUser({
         name,
         email,
-        password: hashedPassword, // Now it's a string
+        password: hashedPassword,
       });
       return res.json(user);
     } catch (error) {
