@@ -15,3 +15,5 @@ const userRepository = () => {
     createUser,
   };
 };
+
+export default userRepository;
