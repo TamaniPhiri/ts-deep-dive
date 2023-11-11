@@ -12,7 +12,7 @@ const userController = {
           password,
         })
         .then(() => {
-          return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+          return res.status(HttpStatusCode.UNAUTHORIZED).send({
             error: "User already exists",
           });
         });
