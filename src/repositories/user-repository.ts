@@ -19,9 +19,22 @@ const userRepository = () => {
       },
     });
   };
+  const updateUserById = async ({ id, email, password, name }: IUser) => {
+    await User.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        email,
+        password,
+      },
+    });
+  };
   return {
     createUser,
     getUserByEmailAndPassword,
+    updateUserById
   };
 };
 
