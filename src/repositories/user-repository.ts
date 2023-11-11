@@ -2,7 +2,7 @@ import { IUser, User } from "../models/User";
 
 const userRepository = () => {
   const createUser = async ({ name, email, password, phone }: IUser) => {
-    await User.create({
+    return await User.create({
       data: {
         name,
         email,
@@ -12,22 +12,22 @@ const userRepository = () => {
     });
   };
   const getUserByEmailAndPassword = async ({ email, password }: IUser) => {
-    await User.findFirst({
+    return await User.findFirst({
       where: {
         email,
         password,
       },
     });
   };
-  const getUserByEmail=async({email}:IUser)=>{
-    await User.findFirst({
-      where:{
-        email
-      }
-    })
-  }
+  const getUserByEmail = async ({ email }: IUser) => {
+    return await User.findFirst({
+      where: {
+        email,
+      },
+    });
+  };
   const updateUserById = async ({ id, email, password, name }: IUser) => {
-    await User.update({
+    return await User.update({
       where: {
         id,
       },
@@ -39,7 +39,7 @@ const userRepository = () => {
     });
   };
   const deleteUserByID = async ({ id }: IUser) => {
-    await User.delete({
+    return await User.delete({
       where: {
         id,
       },
