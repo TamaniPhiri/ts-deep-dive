@@ -59,6 +59,11 @@ const userController = {
       res.cookie("token", token, {
         httpOnly: true,
       });
+      return res.send({
+        email: user.email,
+        name: user.name,
+        token: token,
+      });
     } catch (error) {
       console.log(error);
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
