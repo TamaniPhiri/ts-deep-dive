@@ -9,6 +9,7 @@ const MessageController = () => {
     } catch (error) {
       console.log(error);
       res.status(StatueCodes.INTERNAL_SERVER_ERROR).send({
+        message: "Internal Server Error",
         error: error,
       });
     }

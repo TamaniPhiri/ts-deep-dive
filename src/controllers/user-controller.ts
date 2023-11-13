@@ -86,7 +86,8 @@ const UserController = () => {
     } catch (error) {
       console.error(error);
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
-        error: "Internal Server Error",
+        message: "Internal Server Error",
+        error: error,
       });
     }
   };
