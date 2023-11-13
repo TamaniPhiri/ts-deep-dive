@@ -14,8 +14,8 @@ const Auth = (req: IUserRequest, res: Response, next: NextFunction) => {
   } catch (error) {
     res.clearCookie("token");
     return res.status(HttpStatusCode.UNAUTHORIZED).send({
-      error: error,
       message: "Unauthorized token",
+      error: error,
     });
   }
 };
