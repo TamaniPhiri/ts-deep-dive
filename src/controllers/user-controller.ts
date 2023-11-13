@@ -1,14 +1,14 @@
 import HttpStatusCode from "http-status-codes";
 import { Response, Request } from "express";
-import { prisma } from "../config/db";
 import { hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
+import { User } from "../models/User";
 
 const UserController = () => {
   const userRegister = async (req: Request, res: Response) => {
     const { name, email, password } = req.body;
     try {
-      const existingUser = await prisma.user.findFirst({
+      const existingUser = await User.findFirst({
         where: {
           email,
         },
@@ -21,7 +21,7 @@ const UserController = () => {
 
       const hashedPassword = await hash(password, 10);
 
-      const user = await prisma.user.create({
+      const user = await User.create({
         data: {
           name,
           email,
@@ -44,7 +44,7 @@ const UserController = () => {
   const userLogin = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     try {
-      const user = await prisma.user.findFirst({
+      const user = await User.findFirst({
         where: {
           email: {
             equals: email.toLowerCase(),
