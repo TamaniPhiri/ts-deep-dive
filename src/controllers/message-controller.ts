@@ -13,6 +13,10 @@ const MessageController = () => {
         receiverId,
         content
       );
+      return res.status(StatueCodes.OK).send({
+        success: true,
+        message: message,
+      });
     } catch (error) {
       console.log(error);
       res.status(StatueCodes.INTERNAL_SERVER_ERROR).send({
