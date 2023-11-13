@@ -5,7 +5,7 @@ import Auth from "../middleware/Auth";
 const messageRouter: Router = Router();
 
 messageRouter.post(
-  "/message/:senderId/:receiverId",
+  "/:senderId/:receiverId",
   Auth,
   messageController.CreateMessage
 );
