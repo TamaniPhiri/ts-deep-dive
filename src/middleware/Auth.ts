@@ -2,10 +2,10 @@ import HttpStatusCode from "http-status-codes";
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 interface IUserRequest extends Request {
-  user: any;
+  user?: any;
 }
 
-exports.Auth = (req: IUserRequest, res: Response, next: NextFunction) => {
+const Auth = (req: IUserRequest, res: Response, next: NextFunction) => {
   const token = req.cookies.token;
   try {
     const user = jwt.verify(token, process.env.JWT_SECRET as string);
@@ -19,3 +19,5 @@ exports.Auth = (req: IUserRequest, res: Response, next: NextFunction) => {
     });
   }
 };
+
+export default Auth;
