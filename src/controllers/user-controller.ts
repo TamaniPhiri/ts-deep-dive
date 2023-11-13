@@ -1,15 +1,14 @@
-import jwt from "jsonwebtoken";
-import userService from "../services/user-service";
-import { Response, Request } from "express";
 import HttpStatusCode from "http-status-codes";
-import { User } from "../models/User";
-import bcrypt from "bcrypt";
+import { Response, Request } from "express";
+import { prisma } from "../config/db";
+import { hash, compare } from "bcrypt";
+import jwt from "jsonwebtoken";
 
-const userController = () => {
+const UserController = () => {
   const userRegister = async (req: Request, res: Response) => {
+    const { name, email, password } = req.body;
     try {
-      const { name, email, password } = req.body;
-      const existingUser = await User.findFirst({
+      const existingUser = await prisma.user.findFirst({
         where: {
           email,
         },
@@ -20,16 +19,16 @@ const userController = () => {
         });
       }
 
-      const hashedPassword = await bcrypt.hash(password, 25);
+      const hashedPassword = await hash(password, 10);
 
-      const user = await User.create({
+      const user = await prisma.user.create({
         data: {
           name,
           email,
           password: hashedPassword,
         },
       });
-      return res.status(HttpStatusCode.OK).json({
+      return res.send({
         message: "Registration successful",
         email: user.email,
         name: user.name,
@@ -43,18 +42,20 @@ const userController = () => {
   };
 
   const userLogin = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
     try {
-      const { email, password } = req.body;
-      const user = await userService.GetUserByEmailAndPassword({
-        email,
-        password,
+      const user = await prisma.user.findFirst({
+        where: {
+          email,
+          password,
+        },
       });
       if (!user) {
         return res.status(HttpStatusCode.NOT_FOUND).send({
           error: "User doesn't exist",
         });
       }
-      const verifyPassword = await bcrypt.compare(password, user.password);
+      const verifyPassword = await compare(password, user.password);
       if (!verifyPassword) {
         return res.status(HttpStatusCode.UNAUTHORIZED).send({
           error: "Invalid Password",
@@ -80,9 +81,9 @@ const userController = () => {
   };
 
   return {
-    userRegister,
     userLogin,
+    userRegister,
   };
 };
 
-export default userController();
+export default UserController();
