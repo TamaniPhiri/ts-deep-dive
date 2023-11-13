@@ -92,9 +92,14 @@ const UserController = () => {
     }
   };
 
+  const userLogout=async(req:Request,res:Response)=>{
+    res.clearCookie("token");
+  }
+
   return {
     userLogin,
     userRegister,
+    userLogout
   };
 };
 
