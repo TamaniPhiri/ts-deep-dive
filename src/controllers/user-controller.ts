@@ -1,4 +1,4 @@
-import HttpStatusCode from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
 import { Response, Request } from "express";
 import { hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -14,7 +14,7 @@ const UserController = () => {
         },
       });
       if (existingUser) {
-        return res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
           error: "User already exists",
         });
       }
@@ -35,7 +35,7 @@ const UserController = () => {
       });
     } catch (error) {
       console.error(error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         error: "Internal Server Error",
       });
     }
@@ -53,7 +53,7 @@ const UserController = () => {
       });
 
       if (!user) {
-        return res.status(HttpStatusCode.NOT_FOUND).send({
+        return res.status(StatusCodes.NOT_FOUND).send({
           error: "User doesn't exist",
         });
       }
@@ -61,7 +61,7 @@ const UserController = () => {
       const verifyPassword = await compare(password, user.password);
 
       if (!verifyPassword) {
-        return res.status(HttpStatusCode.UNAUTHORIZED).send({
+        return res.status(StatusCodes.UNAUTHORIZED).send({
           error: "Invalid Password",
         });
       }
@@ -78,28 +78,31 @@ const UserController = () => {
         httpOnly: true,
       });
 
-      return res.status(HttpStatusCode.OK).send({
+      return res.status(StatusCodes.OK).send({
         email: user.email,
         name: user.name,
         token: token,
       });
     } catch (error) {
       console.error(error);
-      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).send({
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         message: "Internal Server Error",
         error: error,
       });
     }
   };
 
-  const userLogout=async(req:Request,res:Response)=>{
+  const userLogout = async (req: Request, res: Response) => {
     res.clearCookie("token");
-  }
+    res.status(StatusCodes.OK).send({
+      message: "Logout successful",
+    });
+  };
 
   return {
     userLogin,
     userRegister,
-    userLogout
+    userLogout,
   };
 };
 
