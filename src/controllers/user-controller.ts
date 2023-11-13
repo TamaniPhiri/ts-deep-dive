@@ -46,27 +46,38 @@ const UserController = () => {
     try {
       const user = await prisma.user.findFirst({
         where: {
-          email,
-          password,
+          email: {
+            equals: email.toLowerCase(),
+          },
         },
       });
+
       if (!user) {
         return res.status(HttpStatusCode.NOT_FOUND).send({
           error: "User doesn't exist",
         });
       }
+
       const verifyPassword = await compare(password, user.password);
+
       if (!verifyPassword) {
         return res.status(HttpStatusCode.UNAUTHORIZED).send({
           error: "Invalid Password",
         });
       }
-      const token = jwt.sign(user, process.env.JWT_SECRET as string, {
-        expiresIn: "1hr",
-      });
+
+      const token = jwt.sign(
+        { userId: user.id },
+        process.env.JWT_SECRET as string,
+        {
+          expiresIn: "1hr",
+        }
+      );
+
       res.cookie("token", token, {
         httpOnly: true,
       });
+
       return res.status(HttpStatusCode.OK).send({
         email: user.email,
         name: user.name,
