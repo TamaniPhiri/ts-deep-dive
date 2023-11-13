@@ -17,3 +17,5 @@ const MessageService = () => {
     SendMessage
   };
 };
+
+export default MessageService();
